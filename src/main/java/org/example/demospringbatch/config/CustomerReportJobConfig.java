@@ -34,12 +34,12 @@ public class CustomerReportJobConfig {
                 .start(step)
                 .build();
     }
-//    @Bean
-//    public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
-//        return new StepBuilder("myStep", jobRepository)
-//                .tasklet(myTasklet, transactionManager).allowStartIfComplete(true)
-//                .build();
-//    }
+    @Bean
+    public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("myStep", jobRepository)
+                .tasklet(myTasklet, transactionManager).allowStartIfComplete(true)
+                .build();
+    }
 
 //    @Bean
 //    public Step chunkStep() {
