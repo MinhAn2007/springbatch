@@ -1,6 +1,5 @@
 package org.example.demospringbatch.batch;
 
-import jakarta.annotation.PreDestroy;
 import org.example.demospringbatch.models.Customer;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
@@ -21,7 +20,6 @@ public class CustomerItemWriter implements ItemWriter<Customer>, Closeable {
         this.writer = new PrintWriter(out);
     }
 
-    @PreDestroy
     @Override
     public void close() throws IOException {
         writer.close();
@@ -30,7 +28,10 @@ public class CustomerItemWriter implements ItemWriter<Customer>, Closeable {
     @Override
     public void write(Chunk<? extends Customer> chunk) throws Exception {
         for (Customer item : chunk) {
-            writer.println(item.toString());
+            // Format the customer information
+            String formattedCustomer = String.format("ID: %d, Name: %s, Birthday: %s",
+                    item.getId(), item.getName(), item.getBirthday());
+            writer.println(formattedCustomer);
         }
     }
 }

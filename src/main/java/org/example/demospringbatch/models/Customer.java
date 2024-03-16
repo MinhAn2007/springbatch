@@ -4,12 +4,13 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Customer {
     private int id ;
     private String name;
 
-    private Calendar birthday;
+    private Date birthday;
 
     private int transactions;
 
@@ -21,14 +22,14 @@ public class Customer {
         this.transactions = transactions;
     }
 
-    public Customer(int id, String name, Calendar birthday, int transactions) {
+    public Customer(int id, String name, Date birthday, int transactions) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
         this.transactions = transactions;
     }
 
-    public Customer(int id, String name, Calendar birthday) {
+    public Customer(int id, String name, Date birthday) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
@@ -53,11 +54,11 @@ public class Customer {
         this.name = name;
     }
 
-    public Calendar getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Calendar birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 }

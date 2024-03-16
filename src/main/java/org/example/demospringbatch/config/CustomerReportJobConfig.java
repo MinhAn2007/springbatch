@@ -2,6 +2,7 @@ package org.example.demospringbatch.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.demospringbatch.batch.CustomerItemReader;
+import org.example.demospringbatch.batch.CustomerItemWriter;
 import org.example.demospringbatch.batch.process.BirthdayFilterProcessor;
 import org.example.demospringbatch.batch.process.TransactionValidatingProcessor;
 import org.example.demospringbatch.models.Customer;
@@ -26,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -45,14 +48,14 @@ public class CustomerReportJobConfig {
     }
     @Bean
     public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("myStep", jobRepository)
-                .tasklet(myTasklet, transactionManager).allowStartIfComplete(true)
+        return new StepBuilder("myStep", jobRepository).<Customer,Customer>chunk(7,transactionManager)
+                        .reader(customerItemReader()).processor(processor()).writer(writer()).
+                allowStartIfComplete(true)
                 .build();
     }
-    @StepScope
     @Bean
-    public ItemReader<Customer> reader() {
-        return new CustomerItemReader("data.xml");
+    public ItemReader<Customer> customerItemReader() {
+        return new CustomerItemReader(new ClassPathResource("data.csv"));
     }
     @StepScope
     @Bean
@@ -60,6 +63,11 @@ public class CustomerReportJobConfig {
         final CompositeItemProcessor<Customer, Customer> processor = new CompositeItemProcessor<>();
         processor.setDelegates(Arrays.asList(new BirthdayFilterProcessor(), new TransactionValidatingProcessor(5)));
         return processor;
+    }
+    @StepScope
+    @Bean
+    public CustomerItemWriter writer() {
+        return new CustomerItemWriter();
     }
 //    @Bean
 //    public Step chunkStep() {
