@@ -6,12 +6,14 @@ import org.example.demospringbatch.batch.CustomerItemWriter;
 import org.example.demospringbatch.batch.process.BirthdayFilterProcessor;
 import org.example.demospringbatch.batch.process.TransactionValidatingProcessor;
 import org.example.demospringbatch.models.Customer;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -35,6 +37,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
+import java.util.List;
+
 
 @Slf4j
 @Configuration
@@ -46,12 +50,16 @@ public class CustomerReportJobConfig {
                 .start(step)
                 .build();
     }
+//    @Bean
+//    public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
+//        return new StepBuilder("myStep", jobRepository).<Customer,Customer>chunk(7,transactionManager)
+//                        .reader(customerItemReader()).processor(processor()).writer(writer()).
+//                allowStartIfComplete(true)
+//                .build();
+//    }
     @Bean
     public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("myStep", jobRepository).<Customer,Customer>chunk(7,transactionManager)
-                        .reader(customerItemReader()).processor(processor()).writer(writer()).
-                allowStartIfComplete(true)
-                .build();
+        return new StepBuilder("tasklet", jobRepository).tasklet(myTasklet,transactionManager).build();
     }
     @Bean
     public ItemReader<Customer> customerItemReader() {
@@ -69,15 +77,6 @@ public class CustomerReportJobConfig {
     public CustomerItemWriter writer() {
         return new CustomerItemWriter();
     }
-//    @Bean
-//    public Step chunkStep() {
-//        return StepBuilder.get("chunkStep")
-//                .<Customer, Customer>chunk(20)
-//                .reader(reader())
-//                .processor(processor())
-//                .writer(writer())
-//                .build();
-//    }
 
     @Bean
     public Tasklet tasklet() {
