@@ -47,7 +47,6 @@ public class BirthdayFilterProcessorTest {
         final Customer customer = new Customer();
         customer.setId(1);
         customer.setName("name");
-        customer.setName("name");
         Date date = new Date(90,2 , 2);
         customer.setBirthday(date);
         final int id = StepScopeTestUtils.doInStepScope(

@@ -4,7 +4,6 @@ import org.example.demospringbatch.batch.process.TransactionValidatingProcessor;
 import org.example.demospringbatch.models.Customer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.batch.item.validator.ValidationException;
 
 public class TransactionValidatingProcessorTest {
 

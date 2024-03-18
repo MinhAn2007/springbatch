@@ -26,15 +26,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 @ContextConfiguration(classes = {DemospringbatchApplication.class, BatchTestConfiguration.class})
 public class CustomerReportJobConfigTest {
     @Autowired
-    private Job myJob;
-    @Autowired
     private JobRepository jobRepository;
     @Autowired
-    private PlatformTransactionManager transactionManager;
-    @Autowired
     private Step step;
-    @Autowired
-    private Tasklet tasklet;
     @Autowired
     private JobLauncherTestUtils testUtils;
 
