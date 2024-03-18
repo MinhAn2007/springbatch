@@ -42,7 +42,8 @@ import java.util.List;
 
 @Slf4j
 @Configuration
-public class CustomerReportJobConfig {
+public class CustomerReportJobConfig implements JobLauncher{
+
 
     @Bean
     public Job myJob(JobRepository jobRepository, Step step) {
@@ -72,7 +73,7 @@ public class CustomerReportJobConfig {
     @Bean
     public ItemProcessor<Customer, Customer> processor() {
         final CompositeItemProcessor<Customer, Customer> processor = new CompositeItemProcessor<>();
-        processor.setDelegates(Arrays.asList(new BirthdayFilterProcessor(), new TransactionValidatingProcessor(3)));
+        processor.setDelegates(Arrays.asList(new BirthdayFilterProcessor(), new TransactionValidatingProcessor(8)));
         return processor;
     }
     @StepScope
@@ -84,5 +85,10 @@ public class CustomerReportJobConfig {
     @Bean
     public Tasklet tasklet() {
         return new CustomerTasklet();
+    }
+
+    @Override
+    public JobExecution run(Job job, JobParameters jobParameters) throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
+        return null;
     }
 }
