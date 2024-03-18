@@ -50,17 +50,20 @@ public class CustomerReportJobConfig {
                 .start(step)
                 .build();
     }
-//    @Bean
-//    public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
-//        return new StepBuilder("myStep", jobRepository).<Customer,Customer>chunk(7,transactionManager)
-//                        .reader(customerItemReader()).processor(processor()).writer(writer()).
-//                allowStartIfComplete(true)
-//                .build();
-//    }
+
+    
     @Bean
     public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("tasklet", jobRepository).tasklet(myTasklet,transactionManager).build();
+        return new StepBuilder("myStep", jobRepository).<Customer,Customer>chunk(2,transactionManager)
+                        .reader(customerItemReader()).processor(processor()).writer(writer()).
+                allowStartIfComplete(true)
+                .build();
     }
+//    @StepScope
+//    @Bean
+//    public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
+//        return new StepBuilder("tasklet", jobRepository).tasklet(myTasklet,transactionManager).build();
+//    }
     @Bean
     public ItemReader<Customer> customerItemReader() {
         return new CustomerItemReader(new ClassPathResource("data.csv"));
@@ -69,7 +72,7 @@ public class CustomerReportJobConfig {
     @Bean
     public ItemProcessor<Customer, Customer> processor() {
         final CompositeItemProcessor<Customer, Customer> processor = new CompositeItemProcessor<>();
-        processor.setDelegates(Arrays.asList(new BirthdayFilterProcessor(), new TransactionValidatingProcessor(5)));
+        processor.setDelegates(Arrays.asList(new BirthdayFilterProcessor(), new TransactionValidatingProcessor(3)));
         return processor;
     }
     @StepScope

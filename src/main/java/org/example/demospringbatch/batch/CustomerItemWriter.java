@@ -28,9 +28,10 @@ public class CustomerItemWriter implements ItemWriter<Customer>, Closeable {
     @Override
     public void write(Chunk<? extends Customer> chunk) throws Exception {
         for (Customer item : chunk) {
-            // Format the customer information
-            String formattedCustomer = String.format("ID: %d, Name: %s, Birthday: %s",
-                    item.getId(), item.getName(), item.getBirthday());
+            System.out.println("Writing item: " + item.getName());
+            String formattedCustomer = String.format("ID: %d, Name: %s, Birthday: %s, Transaction: %d",
+                    item.getId(), item.getName(), item.getBirthday(), item.getTransactions());
+
             writer.println(formattedCustomer);
         }
     }

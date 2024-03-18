@@ -22,11 +22,9 @@ public class BirthdayFilterProcessor implements ItemProcessor<Customer, Customer
         Calendar birthdayCalendar = new GregorianCalendar();
         System.out.println(birthdayCalendar);
         birthdayCalendar.setTime(item.getBirthday());
-
-        // Get current month
         Calendar currentCalendar = Calendar.getInstance();
-
         if (currentCalendar.get(Calendar.MONTH) == birthdayCalendar.get(Calendar.MONTH)) {
+            log.info("Customer has a birthday this month!"+ item.getName());
             return item;
         }
         return null;

@@ -29,6 +29,7 @@ public class CustomerItemReader extends FlatFileItemReader<Customer> {
                 Customer customer = new Customer();
                 customer.setId(fieldSet.readInt("id"));
                 customer.setName(fieldSet.readString("name"));
+                customer.setTransactions(fieldSet.readInt("transaction"));
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date birthday = dateFormat.parse(fieldSet.readString("birthday"));

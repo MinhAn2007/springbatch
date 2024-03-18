@@ -1,17 +1,22 @@
 package org.example.demospringbatch.batch.process;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.example.demospringbatch.models.Customer;
 import org.springframework.batch.item.validator.ValidatingItemProcessor;
 import org.springframework.batch.item.validator.ValidationException;
+
 @Slf4j
 public class TransactionValidatingProcessor extends ValidatingItemProcessor<Customer> {
 
     public TransactionValidatingProcessor(final int limit) {
         super(
                 item -> {
+                    System.out.println("TransactionValidatingProcessor");
+                    System.out.println(item.getTransactions());
+                    System.out.println(item.getName());
                     if (item.getTransactions() < limit) {
-                        log.info("Customer "+ item.getName()+" has less transactions", item.getTransactions());
+                        throw new ValidationException("Customer does not have at least " + limit + " transactions");
                     }
                 }
         );
