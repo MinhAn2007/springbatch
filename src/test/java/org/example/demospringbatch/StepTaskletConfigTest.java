@@ -20,6 +20,8 @@ import static org.mockito.Mockito.when;
 
 public class StepTaskletConfigTest {
     @Mock
+    private JobRepository jobRepository;
+    @Mock
     private StepExecution stepExecution;
 
     @InjectMocks
