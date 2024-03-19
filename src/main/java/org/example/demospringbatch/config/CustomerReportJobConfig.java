@@ -30,7 +30,8 @@ public class CustomerReportJobConfig {
         return new JobBuilder("myJob", jobRepository)
                 .start(stepA.step1())
                 .on(ExitStatus.FAILED.getExitCode()).end()
-                .on(ExitStatus.COMPLETED.getExitCode()).to(stepB.step2()).end()
+                .on(ExitStatus.COMPLETED.getExitCode()).to(stepB.step2())
+                .end()
                 .build();
     }
 

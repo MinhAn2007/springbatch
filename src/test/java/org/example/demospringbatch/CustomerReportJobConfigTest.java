@@ -3,6 +3,7 @@ package org.example.demospringbatch;
 import jdk.jfr.Name;
 import org.example.demospringbatch.config.CustomerReportJobConfig;
 import org.example.demospringbatch.step.chunk.Step1Configuration;
+import org.example.demospringbatch.step.tasklet.StepTaskletConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +24,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class CustomerReportJobConfigTest {
     @SpyBean
     private Step1Configuration step;
+    @SpyBean
+    private StepTaskletConfig tasklet;
     @Autowired
     private JobLauncherTestUtils testUtils;
 
@@ -32,7 +35,7 @@ public class CustomerReportJobConfigTest {
     @Test
     @Name("testEntireJob")
     public void testEntireJob() throws Exception {
-        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(step), testUtils.getUniqueJobParameters());
+        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(step,tasklet), testUtils.getUniqueJobParameters());
         Assertions.assertNotNull(result);
         Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
     }
@@ -40,7 +43,7 @@ public class CustomerReportJobConfigTest {
     @Test
     @Name("testSpecificStep")
     public void testStepExecution() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(step), testUtils.getUniqueJobParameters());
+        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(step,tasklet), testUtils.getUniqueJobParameters());
         Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
     }
 }

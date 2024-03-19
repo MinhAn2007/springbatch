@@ -81,7 +81,6 @@ public class Step1Configuration {
                         .getExecutionContext();
                 executionContext.put("items", writer().getCustomers());
                 if (stepExecution.getStatus() == BatchStatus.COMPLETED) {
-                    log.info("Step failed");
                     return ExitStatus.COMPLETED;
                 } else {
                     return ExitStatus.FAILED;
