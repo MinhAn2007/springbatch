@@ -24,13 +24,17 @@ public class CustomerReportJobConfig {
     private JobRepository jobRepository;
     @Autowired
     private PlatformTransactionManager transactionManager;
+    @Autowired
+    private Step1Configuration step1;
 
+    @Autowired
+    private StepTaskletConfig step2;
     @Bean
-    public Job myJob(Step1Configuration stepA, StepTaskletConfig stepB) {
+    public Job myJob() {
         return new JobBuilder("myJob", jobRepository)
-                .start(stepA.step1())
+                .start(step1.step1())
                 .on(ExitStatus.FAILED.getExitCode()).end()
-                .on(ExitStatus.COMPLETED.getExitCode()).to(stepB.step2())
+                .on(ExitStatus.COMPLETED.getExitCode()).to(step2.step2())
                 .end()
                 .build();
     }

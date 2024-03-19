@@ -35,7 +35,7 @@ public class CustomerReportJobConfigTest {
     @Test
     @Name("testEntireJob")
     public void testEntireJob() throws Exception {
-        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(step,tasklet), testUtils.getUniqueJobParameters());
+        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(), testUtils.getUniqueJobParameters());
         Assertions.assertNotNull(result);
         Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
     }
@@ -43,7 +43,7 @@ public class CustomerReportJobConfigTest {
     @Test
     @Name("testSpecificStep")
     public void testStepExecution() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(step,tasklet), testUtils.getUniqueJobParameters());
+        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(), testUtils.getUniqueJobParameters());
         Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
     }
 }
