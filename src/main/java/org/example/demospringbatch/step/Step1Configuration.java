@@ -11,6 +11,7 @@ import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 public class Step1Configuration {
     @Autowired
     private JobRepository jobRepository;
+
     @Autowired
     private PlatformTransactionManager transactionManager;
     @Bean
@@ -44,6 +46,7 @@ public class Step1Configuration {
                 .listener(stepExecutionListener())
                 .build();
     }
+
     @Bean
     public ItemReader<Customer> customerItemReader() {
         return new CustomerItemReader(new ClassPathResource("data.csv"));
@@ -74,12 +77,16 @@ public class Step1Configuration {
 
             @Override
             public ExitStatus afterStep(StepExecution stepExecution) {
+                ExecutionContext executionContext = stepExecution
+                        .getJobExecution()
+                        .getExecutionContext();
+                executionContext.put("items", writer().getCustomers());
                 if (stepExecution.getStatus() == BatchStatus.COMPLETED) {
+                    log.info("Step failed");
                     return ExitStatus.COMPLETED;
                 } else {
                     return ExitStatus.FAILED;
                 }
             }
         };
-    }
-}
+}}
