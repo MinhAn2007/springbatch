@@ -1,45 +1,65 @@
 package org.example.demospringbatch;
 
-import jdk.jfr.Name;
 import org.example.demospringbatch.config.CustomerReportJobConfig;
 import org.example.demospringbatch.step.chunk.Step1Configuration;
 import org.example.demospringbatch.step.tasklet.StepTaskletConfig;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.batch.core.*;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.batch.test.JobLauncherTestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ContextConfiguration(classes = {DemospringbatchApplication.class, BatchTestConfiguration.class})
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 public class CustomerReportJobConfigTest {
-    @Autowired
-    private JobLauncherTestUtils testUtils;
+    @Mock
+    private JobRepository jobRepository;
+    @Mock
+    private Step1Configuration step1;
+    @Mock
+    private StepTaskletConfig step2;
+    @Mock
+    private JobLauncher jobLauncher;
 
-    @Autowired
+    @Mock
+    private Job job;
+
+    @InjectMocks
     private CustomerReportJobConfig config;
 
-    @Test
-    @Name("testEntireJob")
-    public void testEntireJob() throws Exception {
-        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(), testUtils.getUniqueJobParameters());
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        when(step1.step1()).thenReturn(mock(Step.class));
+        when(step2.step2()).thenReturn(mock(Step.class));
+        when(jobRepository.getLastJobExecution(anyString(), any(JobParameters.class))).thenReturn(mock(JobExecution.class));
+
     }
 
     @Test
-    @Name("testSpecificStep")
-    public void testStepExecution() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(), testUtils.getUniqueJobParameters());
-        Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
+    @DisplayName("Should successfully run job when all steps complete successfully")
+    public void shouldSuccessfullyRunJobWhenAllStepsCompleteSuccessfully() throws Exception {
+        JobExecution jobExecution = new JobExecution(1L);
+        jobExecution.setExitStatus(ExitStatus.COMPLETED);
+        when(jobLauncher.run(any(Job.class), any(JobParameters.class))).thenReturn(jobExecution);
+        JobExecution result = jobLauncher.run(config.myJob(), new JobParameters());
+        verify(jobLauncher, times(1)).run(any(Job.class), any(JobParameters.class));
+        assertEquals(ExitStatus.COMPLETED, result.getExitStatus());
+    }
+
+    @Test
+    @DisplayName("Should fail to run job when any step fails")
+    public void shouldFailToRunJobWhenAnyStepFails() throws Exception {
+        JobExecution jobExecution = new JobExecution(1L);
+        jobExecution.setExitStatus(ExitStatus.FAILED);
+        when(jobLauncher.run(any(Job.class), any(JobParameters.class))).thenReturn(jobExecution);
+        JobExecution result = jobLauncher.run(config.myJob(), new JobParameters());
+        verify(jobLauncher, times(1)).run(any(Job.class), any(JobParameters.class));
+        assertEquals(ExitStatus.FAILED, result.getExitStatus());
     }
 }

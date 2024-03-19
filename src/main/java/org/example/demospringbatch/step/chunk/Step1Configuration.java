@@ -56,7 +56,7 @@ public class Step1Configuration {
         CompositeProcessor processor = new CompositeProcessor();
         processor.setDelegates(Arrays.asList(
                 new BirthdayFilterProcessor(),
-                new TransactionValidatingProcessor(3)
+                new TransactionValidatingProcessor(8)
         ));
 
         return processor;
