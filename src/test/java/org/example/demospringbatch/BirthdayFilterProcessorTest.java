@@ -35,7 +35,6 @@ public class BirthdayFilterProcessorTest {
         customer.setName("name");
         Date date = new Date(90,2 , 2);
         customer.setBirthday(date);
-
         System.out.println(customer.getBirthday() + " " + customer.getName() + " " + customer.getId());
         Assertions.assertNotNull(processor.process(customer));
     }
