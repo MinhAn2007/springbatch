@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.demospringbatch.batch.CustomerItemReader;
 import org.example.demospringbatch.batch.CustomerItemWriter;
 import org.example.demospringbatch.batch.process.BirthdayFilterProcessor;
+import org.example.demospringbatch.batch.process.CompositeProcessor;
 import org.example.demospringbatch.batch.process.TransactionValidatingProcessor;
 import org.example.demospringbatch.models.Customer;
 import org.springframework.batch.core.*;
@@ -60,7 +61,7 @@ public class CustomerReportJobConfig implements JobLauncher{
     @Bean
     public Step step1() {
         return new StepBuilder("step1", jobRepository).<Customer,Customer>chunk(2,transactionManager)
-                .reader(customerItemReader()).processor(processor()).writer(writer()).
+                .reader(customerItemReader()).processor(compositeProcessor()).writer(writer()).
                 allowStartIfComplete(true)
                 .build();
     }
@@ -78,9 +79,13 @@ public class CustomerReportJobConfig implements JobLauncher{
     }
     @StepScope
     @Bean
-    public ItemProcessor<Customer, Customer> processor() {
-        final CompositeItemProcessor<Customer, Customer> processor = new CompositeItemProcessor<>();
-        processor.setDelegates(Arrays.asList(new BirthdayFilterProcessor(), new TransactionValidatingProcessor(8)));
+    public ItemProcessor<Customer, Customer> compositeProcessor() {
+        CompositeProcessor processor = new CompositeProcessor();
+        processor.setDelegates(Arrays.asList(
+                new BirthdayFilterProcessor(),
+                new TransactionValidatingProcessor(7)
+        ));
+
         return processor;
     }
     @StepScope

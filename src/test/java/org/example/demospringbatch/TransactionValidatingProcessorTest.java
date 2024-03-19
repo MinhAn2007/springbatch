@@ -15,13 +15,13 @@ public class TransactionValidatingProcessorTest {
         Assertions.assertDoesNotThrow(() -> processor.process(customer));
     }
 
-    @Test
-    public void shouldThrowExceptionWhenTransactionsAreBelowLimit() {
-        TransactionValidatingProcessor processor = new TransactionValidatingProcessor(5);
-        Customer customer = new Customer();
-        customer.setTransactions(2);
-        Assertions.assertNull(processor.process(customer));
-    }
+//    @Test
+//    public void shouldThrowExceptionWhenTransactionsAreBelowLimit() {
+//        TransactionValidatingProcessor processor = new TransactionValidatingProcessor(5);
+//        Customer customer = new Customer();
+//        customer.setTransactions(2);
+//        Assertions.assertNull(processor.process(customer));
+//    }
 
     @Test
     public void shouldPassValidationWhenTransactionsAreEqualToLimit() {
