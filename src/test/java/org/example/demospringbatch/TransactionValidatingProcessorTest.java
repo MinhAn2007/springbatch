@@ -1,6 +1,6 @@
 package org.example.demospringbatch;
 
-import org.example.demospringbatch.batch.process.TransactionValidatingProcessor;
+import org.example.demospringbatch.step.chunk.batch.process.TransactionValidatingProcessor;
 import org.example.demospringbatch.models.Customer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

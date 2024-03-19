@@ -1,4 +1,4 @@
-package org.example.demospringbatch.batch.process;
+package org.example.demospringbatch.step.chunk.batch.process;
 
 import lombok.Setter;
 import org.example.demospringbatch.models.Customer;

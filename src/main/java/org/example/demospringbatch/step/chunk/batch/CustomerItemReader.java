@@ -1,4 +1,4 @@
-package org.example.demospringbatch.batch;
+package org.example.demospringbatch.step.chunk.batch;
 
 
 import org.example.demospringbatch.models.Customer;

@@ -1,4 +1,4 @@
-package org.example.demospringbatch.batch.process;
+package org.example.demospringbatch.step.chunk.batch.process;
 
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;

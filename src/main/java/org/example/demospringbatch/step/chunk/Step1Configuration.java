@@ -1,11 +1,11 @@
-package org.example.demospringbatch.step;
+package org.example.demospringbatch.step.chunk;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.demospringbatch.batch.CustomerItemReader;
-import org.example.demospringbatch.batch.CustomerItemWriter;
-import org.example.demospringbatch.batch.process.BirthdayFilterProcessor;
-import org.example.demospringbatch.batch.process.CompositeProcessor;
-import org.example.demospringbatch.batch.process.TransactionValidatingProcessor;
+import org.example.demospringbatch.step.chunk.batch.CustomerItemReader;
+import org.example.demospringbatch.step.chunk.batch.CustomerItemWriter;
+import org.example.demospringbatch.step.chunk.batch.process.BirthdayFilterProcessor;
+import org.example.demospringbatch.step.chunk.batch.process.CompositeProcessor;
+import org.example.demospringbatch.step.chunk.batch.process.TransactionValidatingProcessor;
 import org.example.demospringbatch.models.Customer;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -17,7 +17,6 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.PlatformTransactionManager;
 

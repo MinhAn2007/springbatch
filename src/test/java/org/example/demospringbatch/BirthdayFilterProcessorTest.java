@@ -1,6 +1,6 @@
 package org.example.demospringbatch;
 
-import org.example.demospringbatch.batch.process.BirthdayFilterProcessor;
+import org.example.demospringbatch.step.chunk.batch.process.BirthdayFilterProcessor;
 import org.example.demospringbatch.models.Customer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -8,14 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.test.MetaDataInstanceFactory;
-import org.springframework.batch.test.StepScopeTestExecutionListener;
 import org.springframework.batch.test.StepScopeTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import java.util.Date;
 
