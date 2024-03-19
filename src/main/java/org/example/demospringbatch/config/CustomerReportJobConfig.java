@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 
+
 @Slf4j
 @Configuration
 public class CustomerReportJobConfig {
@@ -31,7 +32,7 @@ public class CustomerReportJobConfig {
         return new JobBuilder("myJob", jobRepository)
                 .start(step1.step1())
                 .on(ExitStatus.FAILED.getExitCode()).end()
-                .on(ExitStatus.COMPLETED.getExitCode()).to(step2.step2())
+                .on(ExitStatus.COMPLETED.getExitCode()).to(step2.step2()).on(ExitStatus.COMPLETED.getExitCode()).end().on(ExitStatus.FAILED.getExitCode()).fail()
                 .end()
                 .build();
     }

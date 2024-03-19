@@ -22,6 +22,8 @@ public class StepTaskletConfigTest {
     @Mock
     private JobRepository jobRepository;
     @Mock
+    private PlatformTransactionManager transactionManager;
+    @Mock
     private StepExecution stepExecution;
 
     @InjectMocks
