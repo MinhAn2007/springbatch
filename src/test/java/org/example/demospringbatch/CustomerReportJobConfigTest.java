@@ -25,10 +25,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @SpringBootTest
 @ContextConfiguration(classes = {DemospringbatchApplication.class, BatchTestConfiguration.class})
 public class CustomerReportJobConfigTest {
-    @Autowired
-    private JobRepository jobRepository;
-    @Autowired
-    private Step step;
+
     @Autowired
     private JobLauncherTestUtils testUtils;
 
@@ -38,7 +35,7 @@ public class CustomerReportJobConfigTest {
     @Test
     @Name("testEntireJob")
     public void testEntireJob() throws Exception {
-        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(jobRepository,step), testUtils.getUniqueJobParameters());
+        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(), testUtils.getUniqueJobParameters());
         Assertions.assertNotNull(result);
         Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
     }
@@ -46,7 +43,7 @@ public class CustomerReportJobConfigTest {
     @Test
     @Name("testSpecificStep")
     public void testStepExecution() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(jobRepository,step), testUtils.getUniqueJobParameters());
+        final JobExecution result = testUtils.getJobLauncher().run(config.myJob(), testUtils.getUniqueJobParameters());
         Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
     }
 }

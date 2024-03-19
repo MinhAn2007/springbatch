@@ -10,6 +10,7 @@ import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
@@ -44,27 +45,33 @@ import java.util.List;
 @Configuration
 public class CustomerReportJobConfig implements JobLauncher{
 
+    @Autowired
+    private JobRepository jobRepository;
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     @Bean
-    public Job myJob(JobRepository jobRepository, Step step) {
+    public Job myJob() {
         return new JobBuilder("myJob", jobRepository)
-                .start(step)
+                .start(step1()).next(step2())
                 .build();
     }
 
-    
     @Bean
-    public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("myStep", jobRepository).<Customer,Customer>chunk(2,transactionManager)
-                        .reader(customerItemReader()).processor(processor()).writer(writer()).
+    public Step step1() {
+        return new StepBuilder("step1", jobRepository).<Customer,Customer>chunk(2,transactionManager)
+                .reader(customerItemReader()).processor(processor()).writer(writer()).
                 allowStartIfComplete(true)
                 .build();
     }
-//    @StepScope
-//    @Bean
-//    public Step myStep(JobRepository jobRepository, Tasklet myTasklet, PlatformTransactionManager transactionManager) {
-//        return new StepBuilder("tasklet", jobRepository).tasklet(myTasklet,transactionManager).build();
-//    }
+
+    @Bean
+    public Step step2() {
+        return new StepBuilder("step2", jobRepository).tasklet(tasklet(),transactionManager).
+                allowStartIfComplete(true)
+                .build();
+    }
+
     @Bean
     public ItemReader<Customer> customerItemReader() {
         return new CustomerItemReader(new ClassPathResource("data.csv"));
