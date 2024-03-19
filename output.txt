@@ -1,2 +1,5 @@
 ID: 3, Name: George, Birthday: Tue Mar 02 00:00:00 ICT 1982, Transaction: 9
+ID: 4, Name: An, Birthday: Tue Mar 02 00:00:00 ICT 1982, Transaction: 4
 ID: 5, Name: Tai, Birthday: Tue Mar 02 00:00:00 ICT 1982, Transaction: 11
+ID: 7, Name: Nguyen, Birthday: Thu Mar 04 00:00:00 ICT 1982, Transaction: 5
+ID: 8, Name: Tien, Birthday: Wed Mar 03 00:00:00 ICT 1982, Transaction: 3

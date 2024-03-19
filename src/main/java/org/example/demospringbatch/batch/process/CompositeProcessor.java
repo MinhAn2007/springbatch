@@ -2,6 +2,7 @@ package org.example.demospringbatch.batch.process;
 
 import lombok.Setter;
 import org.example.demospringbatch.models.Customer;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.core.annotation.BeforeStep;
@@ -18,15 +19,6 @@ public class CompositeProcessor implements ItemProcessor<Customer, Customer> {
 
     public CompositeProcessor() {
         this.delegates = new ArrayList<>();
-    }
-
-    @BeforeStep
-    public void beforeStep(StepExecution stepExecution) {
-        this.stepExecution = stepExecution;
-    }
-
-    @AfterStep
-    public void afterStep(StepExecution stepExecution) {
     }
 
     @Override
