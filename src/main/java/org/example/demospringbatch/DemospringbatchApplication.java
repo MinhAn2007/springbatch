@@ -26,7 +26,6 @@ public class DemospringbatchApplication implements CommandLineRunner {
 	}
 	@Override
 	public void run(String... args) throws Exception {
-
         JobParametersBuilder builder = new JobParametersBuilder();
         builder.addDate("date", new Date());
         jobLauncher.run(job, builder.toJobParameters());

@@ -22,10 +22,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest
 @ContextConfiguration(classes = {DemospringbatchApplication.class, BatchTestConfiguration.class})
 public class CustomerReportJobConfigTest {
-    @SpyBean
-    private Step1Configuration step;
-    @SpyBean
-    private StepTaskletConfig tasklet;
     @Autowired
     private JobLauncherTestUtils testUtils;
 

@@ -23,10 +23,7 @@ public class CustomerReportJobConfig {
     @Autowired
     private JobRepository jobRepository;
     @Autowired
-    private PlatformTransactionManager transactionManager;
-    @Autowired
     private Step1Configuration step1;
-
     @Autowired
     private StepTaskletConfig step2;
     @Bean
@@ -37,10 +34,5 @@ public class CustomerReportJobConfig {
                 .on(ExitStatus.COMPLETED.getExitCode()).to(step2.step2())
                 .end()
                 .build();
-    }
-
-    @Bean
-    public ExecutionContext executionContext() {
-        return new ExecutionContext();
     }
 }

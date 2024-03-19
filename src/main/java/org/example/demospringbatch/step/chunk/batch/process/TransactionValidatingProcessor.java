@@ -14,7 +14,6 @@ public class TransactionValidatingProcessor implements ItemProcessor<Customer, C
 
     @Override
     public Customer process(Customer item) throws Exception {
-        // Handle null item gracefully
         if (item == null) {
             return null;
         }
@@ -30,7 +29,6 @@ public class TransactionValidatingProcessor implements ItemProcessor<Customer, C
             // Return null to indicate the item should be filtered out
             return null;
         }
-
         // Return the item if it meets the requirement
         return item;
     }
