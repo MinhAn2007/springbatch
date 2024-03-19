@@ -13,7 +13,8 @@ import java.util.List;
 @Configuration
 public class CustomerTasklet implements Tasklet {
 
-    @Override
+
+   @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         ExecutionContext jobContext = chunkContext.getStepContext()
                 .getStepExecution()
@@ -26,5 +27,4 @@ public class CustomerTasklet implements Tasklet {
         return RepeatStatus.FINISHED;
     }
 }
-
 

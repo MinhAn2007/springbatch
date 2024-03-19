@@ -3,6 +3,7 @@ package org.example.demospringbatch.config;
 import lombok.extern.slf4j.Slf4j;
 import org.example.demospringbatch.step.tasklet.CustomerTasklet;
 import org.example.demospringbatch.step.chunk.Step1Configuration;
+import org.example.demospringbatch.step.tasklet.StepTaskletConfig;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -25,25 +26,14 @@ public class CustomerReportJobConfig {
     private PlatformTransactionManager transactionManager;
 
     @Bean
-    public Job myJob(Step1Configuration stepA) {
+    public Job myJob(Step1Configuration stepA, StepTaskletConfig stepB) {
         return new JobBuilder("myJob", jobRepository)
                 .start(stepA.step1())
                 .on(ExitStatus.FAILED.getExitCode()).end()
-                .on(ExitStatus.COMPLETED.getExitCode()).to(step2()).end()
+                .on(ExitStatus.COMPLETED.getExitCode()).to(stepB.step2()).end()
                 .build();
     }
 
-    @Bean
-    public Step step2() {
-        return new StepBuilder("step2", jobRepository).tasklet(tasklet(), transactionManager).
-                allowStartIfComplete(true)
-                .build();
-    }
-
-    @Bean
-    public Tasklet tasklet() {
-        return new CustomerTasklet();
-    }
     @Bean
     public ExecutionContext executionContext() {
         return new ExecutionContext();
